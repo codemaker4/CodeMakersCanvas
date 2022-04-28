@@ -49,6 +49,14 @@ class CmCanvas {
          * The X-position of the mouse
          */
         this.mouseX = 0;
+        /**
+         * The Y-position of the mouse
+         */
+        this.mouseY = 0;
+        window.addEventListener("mousemove", (e) => {
+            this.mouseX = e.offsetX;
+            this.mouseY = e.offsetY;
+        })
     }
     /**
      * Check if a given library exists and is
