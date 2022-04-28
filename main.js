@@ -4,10 +4,10 @@ let ctx = cmCanvas.ctx;
 let counter = 0;
 
 function draw() {
-    ctx.clearRect(0,0,cmCanvas.canvas.width, cmCanvas.canvas.height);
+    cmCanvas.clear();
 
     ctx.fillStyle = "#f00";
-    ctx.fillRect((Math.cos(counter/100)+1) * cmCanvas.canvas.width/3, (Math.sin(counter/100)+1) * cmCanvas.canvas.height/3, 10, 10);
+    ctx.fillRect((Math.cos(counter/100)+1) * cmCanvas.width/3, (Math.sin(counter/100)+1) * cmCanvas.height/3, 10, 10);
 
     counter++;
 
