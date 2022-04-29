@@ -1,11 +1,11 @@
 /**
  * A class wrapping a html canvas with 2d rendering context.
  * @author CodeMaker_4
- * @version Alpha_0.1
+ * @version Beta_0.001
  */
 class CmCanvas {
     static library = "codemaker4/CmCanvas";
-    static verson = 0.000;
+    static verson = 0.001;
     /**
      * Create a new CmCanvas and bind it to a given HTML canvas element by id.
      * @param {string} canvasId The id of the canvas you want to use.
@@ -27,36 +27,84 @@ class CmCanvas {
         this.canvas.width = innerWidth;
         this.canvas.height = innerHeight;
 
-        /**
-         * The width of the connected canvas.
-         * @type {number}
-         */
-        this.width = this.canvas.width;
-        /**
-         * The height of the connected canvas.
-         * @type {number}
-         */
-        this.height = this.canvas.height;
-
+        this.size = new Vec2d(innerWidth, innerHeight);
         window.addEventListener("resize", () => {
             this.canvas.width = innerWidth;
             this.canvas.height = innerHeight;
-            this.width = this.canvas.width;
-            this.height = this.canvas.height;
+            this.size.setXY(innerWidth, innerHeight);
         });
 
         /**
-         * The X-position of the mouse
+         * The position of the mouse on the screen.
+         * @type {Vec2d}
          */
-        this.mouseX = 0;
+        this.mousePos = new Vec2d(0,0)
         /**
-         * The Y-position of the mouse
+         * The position of the mouse on the world.
+         * @type {Vec2d}
          */
-        this.mouseY = 0;
+         this.worldMousePos = new Vec2d(0,0)
         window.addEventListener("mousemove", (e) => {
-            this.mouseX = e.offsetX;
-            this.mouseY = e.offsetY;
+            if (this.camera.controls.enabled && this.mouseButtons[0]) {
+                this.camera.pos.sub(new Vec2d(e.offsetX, e.offsetY).sub(this.mousePos).div(this.camera.scale))
+            }
+            this.mousePos.setXY(e.offsetX, e.offsetY);
+            this.worldMousePos.set(this.camera.toWorldPos(this.mousePos));
+        });
+        window.addEventListener("wheel", (e) => {
+            this.camera.scale *= 2**(e.deltaY/-this.camera.controls.zoomScrollScale);
         })
+
+        /** Array of booleans representing mousebutton press states. */
+        this.mouseButtons = [false, false, false];
+        window.addEventListener("mousedown", (e) => {
+            this.mouseButtons[e.button] = true;
+        });
+        window.addEventListener("mouseup", (e) => {
+            this.mouseButtons[e.button] = false;
+        });
+
+        this.camera = {
+            canvas: this,
+            pos: new Vec2d(0,0),
+            scale: 1,
+            controls: {
+                enabled: true,
+                zoomScrollScale: 500,
+            },
+            /** Does the drawing context transformations of this camera. */
+            doTransform: function() {
+                this.canvas.worldMousePos.set(this.toWorldPos(this.canvas.mousePos));
+                this.canvas.ctx.translate(-this.pos.x*this.scale, -this.pos.y*this.scale);
+                this.canvas.ctx.scale(this.scale, this.scale)
+                this.canvas.ctx.translate(this.canvas.size.x/2/this.scale, this.canvas.size.y/2/this.scale);
+            },
+            /**
+             * Calculates the on world position of a given on screen vector.
+             * @param {Vec2d} pos The position to convert.
+             * @returns {Vec2d} A new vector with the world position.
+             */
+            toWorldPos: function(pos) {
+                return pos.copy()
+                .sub(this.canvas.size.copy().div(2))
+                .div(this.scale)
+                .add(this.pos);
+            },
+            /**
+             * Calculates the on screen position of a given on world vector.
+             * @param {Vec2d} pos The position to convert.
+             * @returns {Vec2d} A new vector with the screen position.
+             */
+            toScreenPos: function(pos) {
+                return pos.copy()
+                .sub(this.pos)
+                .mult(this.scale)
+                .add(this.canvas.size.copy().div(2));
+            },
+            isOnScreen: function(pos, radius = 0) {
+                return this.toScreenPos(pos).isInRect(this.canvas.size.x, this.canvas.size.y, -radius*this.scale);
+            }
+        }
     }
     /**
      * Check if a given library exists and is
@@ -73,6 +121,7 @@ class CmCanvas {
      * Clear the canvas.
      */
     clear() {
-        ctx.clearRect(0,0,cmCanvas.canvas.width, cmCanvas.canvas.height);
+        ctx.resetTransform()
+        ctx.clearRect(0,0,this.size.x, this.size.y);
     }
 }
