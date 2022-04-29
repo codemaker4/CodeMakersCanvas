@@ -1,4 +1,4 @@
-# CodeMakersCanvas
+# CodeMaker's Canvas
 An utility and wrapper for the HTML canvas and 2d rendering context for full screen interactive canvases.
 ## Features:
 - Automatically resizes the canvas to fill the screen.
