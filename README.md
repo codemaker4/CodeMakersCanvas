@@ -9,4 +9,4 @@ An utility and wrapper for the HTML canvas and 2d rendering context for full a s
 - Uses [codemaker4/vec2d](https://www.github.com/codemaker4/vec2d).
 ## Usage:
 Simply clone the repo and start editing. It starts with an example that explains how it works.
-You can also import CodeMakersCanvas.js and Vec2d.js on your own to add it to an exisitng project.
+You can also import CodeMakersCanvas.js and vec2d.js on your own to add it to an exisitng project.
