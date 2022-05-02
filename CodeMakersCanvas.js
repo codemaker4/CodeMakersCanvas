@@ -27,6 +27,7 @@ class CmCanvas {
         this.canvas.width = innerWidth;
         this.canvas.height = innerHeight;
 
+        /** The size of the canvas. */
         this.size = new Vec2d(innerWidth, innerHeight);
         window.addEventListener("resize", () => {
             this.canvas.width = innerWidth;
@@ -43,7 +44,7 @@ class CmCanvas {
          * The position of the mouse on the world.
          * @type {Vec2d}
          */
-         this.worldMousePos = new Vec2d(0,0)
+        this.worldMousePos = new Vec2d(0,0)
         window.addEventListener("mousemove", (e) => {
             if (this.camera.controls.enabled && this.mouseButtons[0]) {
                 this.camera.pos.sub(new Vec2d(e.offsetX, e.offsetY).sub(this.mousePos).div(this.camera.scale))
@@ -64,15 +65,19 @@ class CmCanvas {
             this.mouseButtons[e.button] = false;
         });
 
+        /** The camera object. */
         this.camera = {
             canvas: this,
+            /** The world position of the center of the screen. */
             pos: new Vec2d(0,0),
+            /** The scale of the camera. */
             scale: 1,
+            /** Some settings for the default camera controls. */
             controls: {
                 enabled: true,
                 zoomScrollScale: 500,
             },
-            /** Does the drawing context transformations of this camera. */
+            /** Does the drawing context transformations of this camera. Do this at the beginning of draw, after CmCanvas.clear()*/
             doTransform: function() {
                 this.canvas.worldMousePos.set(this.toWorldPos(this.canvas.mousePos));
                 this.canvas.ctx.translate(-this.pos.x*this.scale, -this.pos.y*this.scale);
@@ -101,6 +106,12 @@ class CmCanvas {
                 .mult(this.scale)
                 .add(this.canvas.size.copy().div(2));
             },
+            /**
+             * Calculates wether or not the given position is inside the screen. The radius increases the tolerance, handy for culling.
+             * @param {Vec2d} pos The position to convert.
+             * @param {number} radius The radius of the object. Setting this to a higher number increases the chance that this function return true.
+             * @returns {Vec2d} A new vector with the screen position.
+             */
             isOnScreen: function(pos, radius = 0) {
                 return this.toScreenPos(pos).isInRect(this.canvas.size.x, this.canvas.size.y, -radius*this.scale);
             }
