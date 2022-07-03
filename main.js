@@ -29,3 +29,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
+
+setInterval(() => {
+    cmCanvas.camera.startMoveTo(new Vec2d(Math.random()*cmCanvas.canvas.width, Math.random()*cmCanvas.canvas.height), (5**Math.random())/5, 1000);
+}, 2000)
