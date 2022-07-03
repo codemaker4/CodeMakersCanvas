@@ -269,12 +269,10 @@ export class CmCanvasCameraMovement {
     /**
      * Perform a double cosine smoothing on the number.
      * @param {number} x The number to smooth.
-     * @param {number} times The amount of times to smooth.
      * @returns {number}
      */
-    cosSmooth(x, times) {
-        if (times <= 0) return x;
-        return (1-Math.cos(this.cosSmooth(x, times-1)*Math.PI))/2;
+    cosSmooth(x) {
+        return (1-Math.cos(x*Math.PI))/2;
     }
 
     /**
@@ -288,7 +286,7 @@ export class CmCanvasCameraMovement {
         if (start > now) return 0;
         if (end < now) return 1;
         let noSmoothTimeFac = (now - start) / (end - start);
-        return this.cosSmooth(noSmoothTimeFac, 2);
+        return this.cosSmooth(noSmoothTimeFac);
     }
 
     /**
