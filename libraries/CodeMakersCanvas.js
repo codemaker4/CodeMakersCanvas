@@ -303,8 +303,7 @@ export class CmCanvasCameraMovement {
      * @returns {Vec2d}
      */
     calcCamPos() {
-        let timeFac = this.calcTimeFac();
-        return this.startKeyFrame.pos.copy().mult(1-timeFac).add(this.endKeyFrame.pos.copy().mult(timeFac));
+        return this.startKeyFrame.pos.copy().lerpTo(this.endKeyFrame.pos, this.calcTimeFac());
     }
 
     /**
