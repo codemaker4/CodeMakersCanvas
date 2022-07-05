@@ -295,7 +295,7 @@ export class CmCanvasCameraMovement {
      */
     get isMoving() {
         let now = Date.now();
-        return this.startKeyFrame.timestamp > now && this.endKeyFrame.timestamp < now;
+        return this.startKeyFrame.timestamp < now && this.endKeyFrame.timestamp > now;
     }
 
     /**
