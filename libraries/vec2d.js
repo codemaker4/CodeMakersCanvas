@@ -1,4 +1,4 @@
-/** 
+/**
  * Class representing a 2d vector.
  * @example
  * new Vec2d(1, 1).mag() === Math.sqrt(2)
@@ -11,14 +11,14 @@
  * @version 1.0
  * @author CodeMaker_4
 */
-export class Vec2d {
+class Vec2d {
     static library = "codemaker4/vec2d";
     static version = 1;
     /**
      * Create a new 2d vector with a given x and y.
-     * 
+     *
      * To copy a vector use vec2d.copy();
-     * 
+     *
      * @param {number} x The initial X component of the vector
      * @param {number} y The initial Y component of the vector.
      */
@@ -56,9 +56,9 @@ export class Vec2d {
 
     /**
      * Create a new Vec2d with the x and y components on a random position in a box.
-     * 
+     *
      * One corner of the box is the origin, the other is at (width,height)
-     * 
+     *
      * @param {number} width - The maximum value for the X component.
      * @param {number} [height=width] - The maximum value for the y component. (default = width)
      * @returns {Vec2d} The new vector.
@@ -83,7 +83,7 @@ export class Vec2d {
     set(other) {
         this.x = other.x;
         this.y = other.y;
-        return this; 
+        return this;
     }
 
     /**
@@ -95,7 +95,7 @@ export class Vec2d {
     setXY(x, y) {
         this.x = x;
         this.y = y;
-        return this; 
+        return this;
     }
 
     /**
@@ -202,7 +202,7 @@ export class Vec2d {
             this.set(Vec2d.randAngle().mult(newMag));
             return this;
         }
-        this.mult(newMag/this.mag());
+        this.mult(newMag/mag);
         return this;
     }
 
@@ -316,7 +316,7 @@ export class Vec2d {
      * Ensure that the vector is within a given rectangle starting at the origin, and spanning towards (width,height). Also has an optional radius argument, which decreases the bounds by the given amount, handy for ensuring that a ball is inside a rect.
      * @param {number} width Width of the rect.
      * @param {number} height Height of the rect.
-     * @param {number} [radius=0] Radius of the sphere around the vector that must be fully inside.  
+     * @param {number} [radius=0] Radius of the sphere around the vector that must be fully inside.
      * @returns this
      */
     putInRect(width, height, radius) {
