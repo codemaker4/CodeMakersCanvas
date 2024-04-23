@@ -11,7 +11,7 @@
  * @version 1.0
  * @author CodeMaker_4
 */
-class Vec2d {
+export class Vec2d {
     static library = "codemaker4/vec2d";
     static version = 1;
     /**
